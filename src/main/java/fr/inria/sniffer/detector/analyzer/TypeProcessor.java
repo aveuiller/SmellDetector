@@ -34,6 +34,11 @@ public abstract class TypeProcessor<T extends CtType> extends AbstractProcessor<
         String qualifiedName = parseQualifiedName(ctType);
         PaprikaModifiers paprikaModifiers = parseModifiers(ctType);
 
+        // Special case for internal public classes which are sent as virtual files.
+        if (ctType.getPosition() == null || ctType.getPosition().getFile() == null) {
+            // TODO: Retrieve file and position via the parent ?
+            return;
+        }
         String absolutePath = ctType.getPosition().getFile().getAbsolutePath();
         String relativePath = absolutePath.replaceFirst(MainProcessor.currentApp.getPath(), "");
 
